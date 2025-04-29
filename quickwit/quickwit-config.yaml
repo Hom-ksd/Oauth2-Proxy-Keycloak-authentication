@@ -1,0 +1,13 @@
+# quickwit-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: quickwit-config
+  namespace: quickwit
+data:
+  quickwit.yaml: |
+    listen_address: "0.0.0.0:7280"
+    data_dir: "/quickwit-indexes"
+    telemetry:
+      metrics_enabled: true
+      log_level: "info"

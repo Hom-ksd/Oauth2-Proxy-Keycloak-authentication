@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: quickwit-vs
+  namespace: quickwit
+spec:
+  hosts:
+    - quickwit.onionstreasure.com
+  gateways:
+    - quickwit-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: quickwit-service.quickwit.svc.cluster.local
+            port:
+              number: 7280

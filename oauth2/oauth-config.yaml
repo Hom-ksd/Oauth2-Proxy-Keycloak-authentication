@@ -1,0 +1,31 @@
+apiVersion: v1
+data:
+  oauth2-proxy.cfg: |-
+    # Provider config
+    provider="keycloak"
+    provider_display_name="Keycloak"
+    login_url="https://keycloak.onionstreasure.com/realms/Testing/protocol/openid-connect/auth"
+    redeem_url="https://keycloak.onionstreasure.com/realms/Testing/protocol/openid-connect/token"
+    validate_url="https://keycloak.onionstreasure.com/realms/Testing/protocol/openid-connect/userinfo"
+    profile_url="https://keycloak.onionstreasure.com/realms/Testing/protocol/openid-connect/userinfo"
+    ssl_insecure_skip_verify=true
+    # Client config
+    client_id="quickwit"
+    client_secret="EOQuHOKeubCOpO68VX9Wk1nKPlJhaMKv"
+    cookie_secret="ZzBkN000Wm0pQkVkKUhzMk5YPntQRUw_ME1oMTZZTy0="
+    cookie_secure="true"
+    # Upstream config
+    http_address="0.0.0.0:4180"
+    upstreams="file:///dev/null"
+    email_domains=["*"]
+    oidc_issuer_url="https://keycloak.onionstreasure.com/realms/Testing"
+    cookie_domains=["quickwit.onionstreasure.com", "longhorn.onionstreasure.com"]
+    scope="openid"
+    whitelist_domains=[".quickwit.onionstreasure.com:*", ".longhorn.onionstreasure.com:*"]
+    session_store_type="redis"
+    redis_connection_url="redis://redis-service.oauth2-proxy.svc.cluster.local:6379"
+
+kind: ConfigMap
+metadata:
+  name: oauth2-proxy-config
+  namespace: oauth2-proxy

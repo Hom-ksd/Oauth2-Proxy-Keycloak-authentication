@@ -1,0 +1,18 @@
+{
+    "index_id": "logs",
+    "doc_mapping": {
+      "timestamp_field": "timestamp",
+      "field_mappings": [
+        { "name": "timestamp", "type": "datetime", "fast": true },
+        { "name": "message", "type": "text" },
+        { "name": "level", "type": "text", "fast": true }
+      ]
+    },
+    "indexing_settings": {
+      "sort_by_field": "timestamp"
+    },
+    "search_settings": {
+      "default_search_fields": ["message"]
+    }
+  }
+  

@@ -1,0 +1,38 @@
+# quickwit-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quickwit
+  namespace: quickwit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quickwit
+  template:
+    metadata:
+      labels:
+        app: quickwit
+    spec:
+      containers:
+        - name: quickwit
+          image: quickwit/quickwit:latest
+          args: ["run"]
+          ports:
+            - containerPort: 7280
+          env:
+            - name: QUICKWIT_CONFIG
+              value: "/quickwit-config/quickwit.yaml"
+          volumeMounts:
+            - name: quickwit-storage
+              mountPath: /quickwit-indexes
+            - name: config
+              mountPath: /quickwit-config
+              readOnly: true
+      volumes:
+        - name: quickwit-storage
+          persistentVolumeClaim:
+            claimName: quickwit-pvc
+        - name: config
+          configMap:
+            name: quickwit-config

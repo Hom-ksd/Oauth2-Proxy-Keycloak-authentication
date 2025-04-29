@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: quickwit-gateway
+  namespace: quickwit
+spec:
+  selector:
+    istio: istio-ingressgateway # or your Istio ingress gateway label
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - quickwit.onionstreasure.com
+      tls:
+        httpsRedirect: true
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: quickwit-tls
+      hosts:
+        - quickwit.onionstreasure.com
