@@ -22,8 +22,8 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 
 helm repo update
-helm install ingress-nginx ingress-nginx/ingress-nginx \
-  --namespace <ingress-nginx> \
+helm install ingress-nginx ingress-nginx/ingress-nginx /
+  --namespace <ingress-nginx> /
   --create-namespace
 ```
 
@@ -101,7 +101,7 @@ kubectl apply -f ingress_longhorn.yaml
 kubectl apply -f ingress_quickwit.yaml
 ```
 
-## Set up realm ,cliend and user
+## Set up realm cliend and user
 Access keycloak by : 
 
 - **forward port**
@@ -110,9 +110,17 @@ kubectl port-forward svc/keycloak 8080:8080
 ```
 - **Ingress**: Use the domain you configured (e.g., https://keycloak.example.com)
 
+![Keycloak Login Page](images/Keycloak-login.png)
+
+Login Keycloak with username and password that setting in deployment
+
 **Once inside Keycloak:**
 
 - Create a new Realm
+
+![Keycloak Create Realm](images/Keycloak-CreateRealm.png)
+
+![Keycloak Create Realm Name](images/Keycloak-RealmName.png)
 
 - Create a new Client with:
 
@@ -120,9 +128,21 @@ kubectl port-forward svc/keycloak 8080:8080
 
   - Redirect URI: the domain where OAuth2 Proxy is running (e.g., https://app.example.com/oauth2/callback)
 
+![Keycloak Client](images/Keycloak-Client.png)
+
+![Keycloak Create Client](images/Keycloak-CreateClient.png)
+
+![Keycloak Create ClientID](images/Keycloak-CreateClientID.png)
+
+![Keycloak Create ClientAuthentication](images/Keycloak-CreateClientAuthentication.png)
+
+![Keycloak Create ClientRedirect](images/Keycloak-CreateClientRedirect.png)
+
+![Keycloak Create ]
+
 - Create a test User
 
-## Get credential of cliend
+## Get credential of clienId
 
 **In Keycloak:**
 
@@ -132,9 +152,48 @@ kubectl port-forward svc/keycloak 8080:8080
 
 These will be needed to configure OAuth2 Proxy.
 
+![Keycloak Creadential](images/Keycloak-Creadential.png)
+
 
 ## Set config oauth2-proxy
 Change values of oauth2_config.yaml to your domain URL and generate your Cookie Secret
+
+```yaml
+apiVersion: v1
+data:
+  oauth2-proxy.cfg: |-
+    # Provider config
+    provider="keycloak"
+    provider_display_name="Keycloak"
+    login_url="https://<keycloak-domain>/realms/<Realm Name>/protocol/openid-connect/auth"
+    redeem_url="https://<keycloak-domain>/realms/<Realm Name>/protocol/openid-connect/token"
+    validate_url="https://<keycloak-domain>/realms/<Realm Name>/protocol/openid-connect/userinfo"
+    profile_url="https://<keycloak-domain>/realms/<Realm Name>/protocol/openid-connect/userinfo"
+    ssl_insecure_skip_verify=false
+
+    # Client config
+    client_id="<Client ID>"
+    client_secret="<Client Secret>"
+    cookie_secret="<Cookie Secret>"
+    cookie_secure="true"
+    
+    # Upstream config
+    http_address="0.0.0.0:4180"
+    upstreams="file:///dev/null"
+    email_domains=["*"]
+    oidc_issuer_url="https://<domain>/realms/<Realm Name>"
+    cookie_domains=["quickwit.domain.com", "longhorn.example.com"]
+    scope="openid"
+    whitelist_domains=[".quickwit.domain.com:*", ".longhorn.example.com:*"]
+    session_store_type="redis"
+    redis_connection_url="redis://redis-service.oauth2-proxy.svc.cluster.local:6379"
+
+kind: ConfigMap
+metadata:
+  name: oauth2-proxy-config
+  namespace: oauth2-proxy
+```
+
 
 you can generate you secret with 
 ```bash
@@ -171,3 +230,25 @@ Apply the oauth2 proxy:
 ```bash
 kubectl apply -f oauth2-proxy.yaml
 ```
+
+## Testing
+
+### Longhorn
+
+access the longhorn domain you configured (e.g., https://longhorn.example.com) to testing redirect and authetication
+
+![Longhorn](images/Longhorn.png)
+
+![Longhorn-redirect](images/Longhorn-redirect.png)
+
+![Longhorn-cookie](images/Longhorn-cookie.png)
+
+### Quickwit
+
+access the Quickwit domain you configured (e.g., https://quickwit.example.com) to testing redirect and authetication
+
+![Quickwit](images/Quickwit.png)
+
+![Quickwit-redirect](images/Quickwit-redirect.png)
+
+![Quickwit-cookie](images/Quickwit-cookie.png)

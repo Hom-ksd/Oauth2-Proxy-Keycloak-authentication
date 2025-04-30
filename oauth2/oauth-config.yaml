@@ -4,21 +4,23 @@ data:
     # Provider config
     provider="keycloak"
     provider_display_name="Keycloak"
-    login_url="https://keycloak.onionstreasure.com/realms/Testing/protocol/openid-connect/auth"
-    redeem_url="https://keycloak.onionstreasure.com/realms/Testing/protocol/openid-connect/token"
-    validate_url="https://keycloak.onionstreasure.com/realms/Testing/protocol/openid-connect/userinfo"
-    profile_url="https://keycloak.onionstreasure.com/realms/Testing/protocol/openid-connect/userinfo"
-    ssl_insecure_skip_verify=true
+    login_url="https://keycloak.onionstreasure.com/realms/Oauth2-Proxy/protocol/openid-connect/auth"
+    redeem_url="https://keycloak.onionstreasure.com/realms/Oauth2-Proxy/protocol/openid-connect/token"
+    validate_url="https://keycloak.onionstreasure.com/realms/Oauth2-Proxy/protocol/openid-connect/userinfo"
+    profile_url="https://keycloak.onionstreasure.com/realms/Oauth2-Proxy/protocol/openid-connect/userinfo"
+    ssl_insecure_skip_verify=false
+
     # Client config
-    client_id="quickwit"
-    client_secret="EOQuHOKeubCOpO68VX9Wk1nKPlJhaMKv"
+    client_id="yourClientID"
+    client_secret="wU205Tn0JLB0Mo2hGROoSVeySdvDSIwz"
     cookie_secret="ZzBkN000Wm0pQkVkKUhzMk5YPntQRUw_ME1oMTZZTy0="
     cookie_secure="true"
+    
     # Upstream config
     http_address="0.0.0.0:4180"
     upstreams="file:///dev/null"
     email_domains=["*"]
-    oidc_issuer_url="https://keycloak.onionstreasure.com/realms/Testing"
+    oidc_issuer_url="https://keycloak.onionstreasure.com/realms/Oauth2-Proxy"
     cookie_domains=["quickwit.onionstreasure.com", "longhorn.onionstreasure.com"]
     scope="openid"
     whitelist_domains=[".quickwit.onionstreasure.com:*", ".longhorn.onionstreasure.com:*"]
