@@ -41,7 +41,7 @@ email: youremail@email.com
 ```
 Apply clusterIssuer
 ```bash
-kubectl apply -f cluster-issuer.yaml
+kubectl apply -f clusterissuer.yaml
 ```
 
 
@@ -58,7 +58,7 @@ Create a keycloak.yaml manifest that includes:
 Apply the Keycloak configuration:
 
 ```bash
-kubectl apply -f keycloak.yaml
+kubectl apply -f keycloak-deployment.yaml
 ```
 
 Change keycloak ingress file to your domain that you use
@@ -68,7 +68,7 @@ host: <<your-domain>>
 
 Apply ingress 
 ```bash
-kubectl apply -f keycloak_ingress.yaml
+kubectl apply -f ingress-keycloak.yaml
 ```
 
 
@@ -86,8 +86,11 @@ storageClassName: longhorn
   - Service
 
 ```bash
-kubectl apply -f pvc-quickwit.yaml
-kubectl apply -f quickwit.yaml
+kubectl apply -f quickwit-namespace.yaml
+kubectl apply -f quickwit-config.yaml
+kubectl apply -f pvc-quickwit-deployment.yaml
+kubectl apply -f quickwit-pvc.yaml
+kubectl apply -f quickwit-service.yaml
 ```
 
 
@@ -208,7 +211,8 @@ cookie_secret="<<your-secret>>"
 Apply the oauth configuration:
 
 ```bash
-kubectl apply -f oauth2_config.yaml
+kubectl apply -f oauth_config.yaml
+kubectl apply -f redis.yaml
 ```
 ## Deploy Oauth2-proxy
 Create a deployment manifest oauth2-proxy.yaml
@@ -228,7 +232,7 @@ nginx.ingress.kubernetes.io/auth-signin: "https://<your-oauth2-domain>/oauth2/st
 ```
 Apply the oauth2 proxy:
 ```bash
-kubectl apply -f oauth2-proxy.yaml
+kubectl apply -f oauth2.yaml
 ```
 
 ## Testing
