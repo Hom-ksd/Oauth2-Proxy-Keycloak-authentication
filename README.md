@@ -252,3 +252,7 @@ access the Quickwit domain you configured (e.g., https://quickwit.example.com) t
 ![Quickwit-redirect](images/Quickwit-redirect.png)
 
 ![Quickwit-cookie](images/Quickwit-cookie.png)
+
+## Credits
+Configuration and flow adapted from
+🔗 [Ibrahim H. Koyuncu's Medium article](https://ibrahimhkoyuncu.medium.com/kubernetes-ingress-external-authentication-with-oauth2-proxy-and-keycloak-9924a3b2d34a)
